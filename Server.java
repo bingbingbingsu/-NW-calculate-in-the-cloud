@@ -12,10 +12,10 @@ public class Server {
     public static void main(String[] args) throws Exception {
         ServerSocket serverSocket = new ServerSocket(7777);
         System.out.println("Server is running...");
-        ExecutorService serverPool = Executors.newFixedThreadPool(10);
+        ExecutorService serverPool = Executors.newFixedThreadPool(10); // ThreadPool : 10
         while (true) {
-            Socket socket = serverSocket.accept();
-            serverPool.execute(new serverThread(socket));
+            Socket socket = serverSocket.accept(); // connect client
+            serverPool.execute(new serverThread(socket)); // excute serverThread
         }
     }
 
@@ -31,7 +31,7 @@ public class Server {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-                int flag = 1;
+                int flag = 1; //For handeling below while statment
                 
                 while (flag==1) {
                     String inputString = in.readLine();
@@ -60,7 +60,7 @@ public class Server {
                             break;
                         case "DIV": // /
                             if (B==0) {
-                                out.write("600\n");
+                                out.write("600\n"); // Divide by Zero
                                 out.flush();
                             }
                             else {
@@ -68,7 +68,7 @@ public class Server {
                                 out.flush();
                             }
                             break;
-                        case "STOP": // *
+                        case "STOP": // End serverThread
                             System.out.println("Unconnect :"+socket);
                             flag = 0;
                             break;

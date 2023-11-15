@@ -9,9 +9,9 @@ import java.util.StringTokenizer;
 
 public class Client {
     public static void main(String[] args){
-        final String fileName = "server_info.dat";
-        String address = "localhost";
-        int port = 7777;
+        final String fileName = "server_info.dat";// get server information from this file
+        String address = "localhost"; //default address
+        int port = 7777; // default port
 
         try {
             File file = new File(fileName);
@@ -21,7 +21,7 @@ public class Client {
                 port = Integer.parseInt(br.readLine());
                 br.close();
             }
-            else {
+            else { // when file is not exists, default ip, port are used
                 System.out.println("(Clinet) "+fileName+" is not exist");
             }
         } catch (Exception e) {
@@ -30,7 +30,7 @@ public class Client {
 
         Socket socket = null;
         try {
-            socket = new Socket(address, port);
+            socket = new Socket(address, port); // connect server
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
@@ -38,8 +38,8 @@ public class Client {
 
             System.out.println("Command : numA + numB (+, -, *, /)\nex :10 * 30");
             while (true) {
-                String command = br.readLine();
-                if (command.toLowerCase().equals("end")) {
+                String command = br.readLine(); // input by user 
+                if (command.toLowerCase().equals("end")) { // to unconnect
                     out.write("STOP\n");
                     out.flush();
                     break;
@@ -65,27 +65,27 @@ public class Client {
                         break;
                 
                     default:
-                        message = "NOT -1 -1";
+                        message = "NOT -1 -1"; // server must take at least 3 arguments
                         break;
                 }
-                if (arr.length>3) {
+                if (arr.length>3) { // if user input arguments more than 3
                     for (int i = 3; i < arr.length; i++) {
                         message = message + " " + arr[i];
                     }
                 }
                 message = message +"\n";
                 out.write(message);
-                out.flush();
+                out.flush();// sending a message to server
 
-                String inputString = in.readLine();
+                String inputString = in.readLine();// recieve a message from server
                 StringTokenizer st = new StringTokenizer(inputString, " ");
                 String stateCode = st.nextToken();
-                if (stateCode.equals("200")) {
+                if (stateCode.equals("200")) { // correct message
                     String answer = st.nextToken();
                     System.out.println("Answer : " + answer);
                 }
                 else {
-                    System.out.print("Incorrect : ");
+                    System.out.print("Incorrect : "); // incorrect
                     switch (stateCode) {
                         case "404":
                             System.out.println("Wrong operation");
