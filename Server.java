@@ -37,8 +37,18 @@ public class Server {
                     String inputString = in.readLine();
                     StringTokenizer st = new StringTokenizer(inputString, " ");
                     String method = st.nextToken();
-                    double A = Double.parseDouble(st.nextToken());
-                    double B = Double.parseDouble(st.nextToken());
+                    String AString = st.nextToken();
+                    String BString = st.nextToken();
+                    Double A, B;
+                    if (isNumber(BString)&&isNumber(AString)) { // check the string is number
+                        A = Double.parseDouble(AString);
+                        B = Double.parseDouble(BString);
+                    }
+                    else{
+                        out.write("987\n");
+                        out.flush();
+                        continue;
+                    }
                     if (st.hasMoreTokens()) { // Too many aruments
                         out.write("999\n");
                         out.flush();
@@ -72,6 +82,10 @@ public class Server {
                             System.out.println("Unconnect :"+socket);
                             flag = 0;
                             break;
+                        case "SMALL":
+                            out.write("444\n");
+                            out.flush();
+                            break;
                     
                         default: // Wrong Operation
                             out.write("404\n");
@@ -88,6 +102,15 @@ public class Server {
                     System.out.println(e.getMessage());
                 }
             }
+        }
+    }
+
+    public static boolean isNumber(String string) {
+        try {
+            Double.parseDouble(string);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

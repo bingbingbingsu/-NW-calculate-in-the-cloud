@@ -45,12 +45,15 @@ public class Client {
                     break;
                 }
                 String arr[] = command.split(" ");
+                String sign = null;
                 if (arr.length < 2) {
-                    System.out.println("(Client) Wrong Input");
-                    continue;
+                    sign = "SMALL";
+                }
+                else {
+                    sign = arr[1];
                 }
                 String message = null;
-                switch (arr[1]) {
+                switch (sign) {
                     case "+":
                         message = "ADD"+" "+arr[0]+" "+arr[2];
                         break;
@@ -62,6 +65,9 @@ public class Client {
                         break;
                     case "/":
                         message = "DIV"+" "+arr[0]+" "+arr[2];
+                        break;
+                    case "SMALL":
+                        message = "SMALL -1 -1"; // server must take at least 3 arguments
                         break;
                 
                     default:
@@ -95,6 +101,12 @@ public class Client {
                             break;
                         case "600":
                             System.out.println("Divide by Zero");
+                            break;
+                        case "444":
+                            System.out.println("Small arguments");
+                            break;
+                        case "987":
+                            System.out.println("Not a number");
                             break;
                     
                         default:
