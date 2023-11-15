@@ -36,7 +36,29 @@ public class Client {
                     out.flush();
                     break;
                 }
-                out.write(command);
+                String arr[] = command.split(" ");
+                if (arr.length <1 ) {
+                    System.out.println("Wrong Input");
+                    continue;
+                }
+                switch (arr[1]) {
+                    case "+":
+                        out.write("ADD"+" "+arr[0]+" "+arr[2]+"\n");
+                        break;
+                    case "-":
+                        out.write("MIN"+" "+arr[0]+" "+arr[2]+"\n");
+                        break;
+                    case "*":
+                        out.write("MUL"+" "+arr[0]+" "+arr[2]+"\n");
+                        break;
+                    case "/":
+                        out.write("DIV"+" "+arr[0]+" "+arr[2]+"\n");
+                        break;
+                
+                    default:
+                        System.out.println("Wrong input");
+                        continue;
+                }
                 out.flush();
 
                 String inputString = in.readLine();
@@ -50,10 +72,17 @@ public class Client {
                     System.out.println("Incorrect :");
                     switch (stateCode) {
                         case "404":
-                            
+                            System.out.println("Wrong operation");
+                            break;
+                        case "999":
+                            System.out.println("Too many arguments");
+                            break;
+                        case "600":
+                            System.out.println("Divide by Zero");
                             break;
                     
                         default:
+                            System.out.println("Other Errors");
                             break;
                     }
                 }
