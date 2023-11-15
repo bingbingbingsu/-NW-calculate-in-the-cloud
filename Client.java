@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -11,11 +12,18 @@ public class Client {
         final String fileName = "server_info.dat";
         String address = "localhost";
         int port = 7777;
+
         try {
-            BufferedReader br = new BufferedReader(new FileReader(fileName));
-            address = br.readLine();
-            port = Integer.parseInt(br.readLine());
-            br.close();
+            File file = new File(fileName);
+            if (file.exists()) {
+                BufferedReader br = new BufferedReader(new FileReader(fileName));
+                address = br.readLine();
+                port = Integer.parseInt(br.readLine());
+                br.close();
+            }
+            else {
+                System.out.println("(Clinet) "+fileName+" is not exist");
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -28,37 +36,45 @@ public class Client {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-            System.out.println("Command : numA + numB (+, -, *, /)\n ex:\n10 * 30");
+            System.out.println("Command : numA + numB (+, -, *, /)\nex :10 * 30");
             while (true) {
                 String command = br.readLine();
                 if (command.toLowerCase().equals("end")) {
-                    out.write("STOP");
+                    out.write("STOP\n");
                     out.flush();
                     break;
                 }
                 String arr[] = command.split(" ");
-                if (arr.length <1 ) {
-                    System.out.println("Wrong Input");
+                if (arr.length < 2) {
+                    System.out.println("(Client) Wrong Input");
                     continue;
                 }
+                String message = null;
                 switch (arr[1]) {
                     case "+":
-                        out.write("ADD"+" "+arr[0]+" "+arr[2]+"\n");
+                        message = "ADD"+" "+arr[0]+" "+arr[2];
                         break;
                     case "-":
-                        out.write("MIN"+" "+arr[0]+" "+arr[2]+"\n");
+                        message = "MIN"+" "+arr[0]+" "+arr[2];
                         break;
                     case "*":
-                        out.write("MUL"+" "+arr[0]+" "+arr[2]+"\n");
+                        message = "MUL"+" "+arr[0]+" "+arr[2];
                         break;
                     case "/":
-                        out.write("DIV"+" "+arr[0]+" "+arr[2]+"\n");
+                        message = "DIV"+" "+arr[0]+" "+arr[2];
                         break;
                 
                     default:
-                        System.out.println("Wrong input");
-                        continue;
+                        message = "NOT -1 -1";
+                        break;
                 }
+                if (arr.length>3) {
+                    for (int i = 3; i < arr.length; i++) {
+                        message = message + " " + arr[i];
+                    }
+                }
+                message = message +"\n";
+                out.write(message);
                 out.flush();
 
                 String inputString = in.readLine();
@@ -66,10 +82,10 @@ public class Client {
                 String stateCode = st.nextToken();
                 if (stateCode.equals("200")) {
                     String answer = st.nextToken();
-                    System.out.println("Answer :" + answer);
+                    System.out.println("Answer : " + answer);
                 }
                 else {
-                    System.out.println("Incorrect :");
+                    System.out.print("Incorrect : ");
                     switch (stateCode) {
                         case "404":
                             System.out.println("Wrong operation");
